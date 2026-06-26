@@ -1,3 +1,5 @@
+dataset/
+*.pkl
 *.csv
 _pycache_/
 *.pyc
