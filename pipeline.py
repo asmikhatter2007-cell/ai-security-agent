@@ -233,13 +233,6 @@ def run_pipeline(flow_data, builder):
     context_brief = build_context_brief(context)
 
 
-    structured_data["behaviour_summary"]["evidence_from_recent_activity"]["request_frequency"] = 0.02
-
-    structured_data["behaviour_summary"]["evidence_from_recent_activity"]["destination_concentration"]["flows_to_destination"] = 2
-
-    structured_data["behaviour_summary"]["evidence_from_recent_activity"]["most_targeted_port"]["flows"] = 3
-
-    structured_data["behaviour_summary"]["evidence_from_recent_activity"]["payload_characteristic"] = "medium/large payloads"
     
     # -------------------------
     # Debug print
