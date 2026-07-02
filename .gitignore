@@ -4,3 +4,4 @@ dataset/
 _pycache_/
 *.pyc
 .vscode/
+incident_reports.txt

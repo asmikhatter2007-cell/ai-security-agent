@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv')
+df = pd.read_csv('dataset/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv')
 df.columns = df.columns.str.strip()
 df = df.replace([np.inf, -np.inf], np.nan)
+print(df.columns.tolist())
 
 columns_to_check = [
     'Total Length of Fwd Packets',
