@@ -1,4 +1,5 @@
 from context_builder import ContextBuilder
+from writer import agent3_generate_report
 import pandas as pd
 import numpy as np
 import pickle
@@ -252,6 +253,16 @@ def run_pipeline(flow_data, builder):
 
     print(result)
 
+    print("\n--- Agent 3 Report ---\n")
+
+    report = agent3_generate_report(
+    agent1_summary=structured_data["agent1_summary"],
+    current_flow=structured_data["current_flow"],
+    agent2_result=result
+    )
+
+    print(report)
+
     # -------------------------
     # Save incident
     # -------------------------
@@ -263,7 +274,7 @@ def run_pipeline(flow_data, builder):
         f.write("\n\n")
         f.write(context_brief)
         f.write("\n\n")
-        f.write(result)
+        f.write(report)
         f.write("\n\n")
 
     return result
