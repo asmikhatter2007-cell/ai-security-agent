@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { getNextFlow, generateReport } from "../api/backend";
 
 const THREAT_COLORS = {
   BENIGN: "#10B981",
@@ -18,6 +19,9 @@ function FlowCard({ flow, onExpire }) {
   const [visible, setVisible] = useState(true);
   const [expanded, setExpanded] = useState(!flow.isBenign);
   const [opacity, setOpacity] = useState(1);
+  const [report, setReport] = useState(null);
+  const [loadingReport, setLoadingReport] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (flow.isBenign) {
@@ -39,6 +43,9 @@ function FlowCard({ flow, onExpire }) {
 
   const color = THREAT_COLORS[flow.threat] || "#6B7280";
   const icon = THREAT_ICONS[flow.threat] || "?";
+  const sections = report
+  ? report.split(/\n\s*\n/)
+  : []; 
 
   return (
     <div
@@ -146,9 +153,195 @@ function FlowCard({ flow, onExpire }) {
               </div>
             </div>
           </div>
-          <div style={{ color: "#6B7280", fontSize: 12, lineHeight: 1.6 }}>
+          <div style={{ color: "#6B7280", fontSize: 12, lineHeight: 1.6, marginTop: 8,MarginBottom: 10,}}>
             {flow.reason}
           </div>
+            {flow.evidence && flow.evidence.length > 0 && (
+  <div
+    style={{
+      marginTop: 12,
+      padding: "10px",
+      background: "rgba(255,255,255,0.03)",
+      borderRadius: 8,
+      border: "1px solid rgba(255,255,255,0.06)",
+    }}
+  >
+    <div
+      style={{
+        fontSize: 10,
+        color: "#4B5563",
+        textTransform: "uppercase",
+        letterSpacing: "0.08em",
+        marginBottom: 6,
+      }}
+    >
+      Evidence Used
+    </div>
+
+    {flow.evidence.map((item, index) => (
+      <div
+        key={index}
+        style={{
+          color: "#CBD5E1",
+          fontSize: 12,
+          lineHeight: 1.5,
+          MarginBottom: 4,
+        }}
+      >
+        • {item}
+      </div>
+    ))}
+    <button
+    onClick={async (e) => {
+
+    e.stopPropagation();
+
+    // If already loaded, just toggle visibility
+    if (report) {
+    setShowModal(true);
+    return;
+    }
+
+    try {
+
+        setLoadingReport(true);
+
+        const result = await generateReport(flow);
+
+        setReport(result.report);
+
+        setShowModal(true);
+    } catch (err) {
+
+        console.error(err);
+
+    } finally {
+
+        setLoadingReport(false);
+
+    }
+
+}}
+    style={{
+      marginTop: 12,
+      width: "100%",
+      padding: "8px",
+      borderRadius: 8,
+      background:"#5e5f63",
+      color:"white",
+      border:"none",
+      cursor: "pointer",
+      fontWeight: 600,
+    }}
+    >
+      {showModal
+    ? "Close Report"
+    : "View Agent 3 Report"}
+    </button>
+    {showModal && (
+    <div
+        onClick={() => setShowModal(false)}
+        style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+        }}
+    >
+        <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+                width: "70%",
+                maxHeight: "80vh",
+                overflowY: "auto",
+                background: "#111827",
+                borderRadius: 14,
+                padding: 24,
+                border: "1px solid #374151",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+            }}
+        >
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: 20,
+                }}
+            >
+                <h2
+                    style={{
+                        color: "#F9FAFB",
+                        margin: 0,
+                    }}
+                >
+                    🛡 Agent 3 Incident Report
+                </h2>
+
+                <button
+                    onClick={() => setShowModal(false)}
+                    style={{
+                        background: "transparent",
+                        color: "#9CA3AF",
+                        border: "none",
+                        fontSize: 22,
+                        cursor: "pointer",
+                    }}
+                >
+                    ✕
+                </button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+
+    {sections.map((section, index) => (
+
+        <div
+            key={index}
+            style={{
+                background: "#111827",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: 10,
+                padding: 16,
+            }}
+        >
+
+            <div
+                style={{
+                    color: "#60A5FA",
+                    fontWeight: 700,
+                    marginBottom: 12,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    fontSize: 12,
+                }}
+            >
+                {section.trim().split("\n")[0]}
+            </div>
+
+            <div
+                style={{
+                    whiteSpace: "pre-wrap",
+                    color: "#CBD5E1",
+                    lineHeight: 1.7,
+                    fontSize: 14,
+                }}
+            >
+                {section.trim().split("\n").slice(1).join("\n")}
+            </div>
+
+        </div>
+
+    ))}
+
+</div>
+        </div>
+    </div>
+)}
+  </div>
+)}
         </div>
       )}
     </div>
@@ -185,23 +378,45 @@ export default function LiveFeed({ onNewThreat, onStatsUpdate }) {
   const [flows, setFlows] = useState([]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const flow = generateFlow();
+  let mounted = true;
 
-      setFlows(prev => [flow, ...prev].slice(0, 50));
+  async function poll() {
 
-      if (!flow.isBenign && onNewThreat) {
-        onNewThreat(flow);
+    while (mounted) {
+
+      try {
+
+        const flow = await getNextFlow();
+
+        if (!mounted) break;
+
+        setFlows(prev => [flow, ...prev].slice(0, 50));
+
+        if (!flow.isBenign && onNewThreat) {
+          onNewThreat(flow);
+        }
+
+        if (onStatsUpdate) {
+          onStatsUpdate(flow);
+        }
+
+      } catch (err) {
+        console.error(err);
       }
 
-      if (onStatsUpdate) {
-        onStatsUpdate(flow);
-      }
-    }, 2000);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+  }
 
-    return () => clearInterval(interval);
-  }, []);
+  poll();
 
+  return () => {
+    mounted = false;
+  };
+
+}, []);
+
+ 
   return (
     <div className="live-feed">
       <div style={{
@@ -226,12 +441,16 @@ export default function LiveFeed({ onNewThreat, onStatsUpdate }) {
             Waiting for traffic...
           </div>
         ) : (
-          flows.map(flow => (
-            <FlowCard
-              key={flow.id}
-              flow={flow}
-            />
-          ))
+      flows.map(flow => {
+      console.log("Rendering card:", flow);
+
+      return (
+     <FlowCard
+      key={flow.id}
+      flow={flow}
+    />
+  );
+})
         )}
       </div>
     </div>

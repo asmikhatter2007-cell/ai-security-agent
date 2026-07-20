@@ -32,7 +32,7 @@ export default function AlertPanel({ alerts = [] }) {
           {alerts.map((alert, i) => {
             const color = THREAT_COLORS[alert.threat] || "#7C8CA5";
             return (
-              <div key={alert.id + i} style={{
+              <div key={i} style={{
                 background: "#060E1A",
                 border: `1px solid ${color}30`,
                 borderLeft: `3px solid ${color}`,
@@ -60,12 +60,20 @@ export default function AlertPanel({ alerts = [] }) {
                   {alert.srcIp}
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{
-                    fontSize: 10,
-                    color: alert.verdict === "Supports" ? "#10B981" : "#F59E0B",
-                  }}>
-                    {alert.verdict}
-                  </span>
+                  <span
+                  style={{
+                  fontSize: 10,
+                  color:
+                  alert.verdict === "Supports"
+                  ? "#10B981"
+                  : alert.verdict === "Contradicts"
+                  ? "#EF4444"
+                  : "#F59E0B",
+                  fontWeight: 600,
+                }}
+>
+                {alert.verdict || "Pending"}
+                </span>
                   <span style={{ fontSize: 10, color: "#7C8CA5", fontFamily: "monospace" }}>
                     {alert.timestamp}
                   </span>
