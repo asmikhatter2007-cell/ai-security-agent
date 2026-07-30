@@ -1,5 +1,6 @@
 from context_builder import ContextBuilder
 from writer import agent3_generate_report
+from historical_activity import HistoricalActivity
 import pandas as pd
 import numpy as np
 import pickle
@@ -20,6 +21,8 @@ with open("rf_features.pkl", "rb") as f:
 
 
 print("Agent 1 is ready")
+
+history=HistoricalActivity()
 
 
 # ============================================================
@@ -92,13 +95,13 @@ For PortScan, prioritize:
 - timing between flows
 - payload characteristics
 
-For DDoS, prioritize:
+For DDoS, DoS Hulk, DoS GoldenEye, DoS Slowloris, DoS Slowhttptest, prioritize:
 - request frequency
 - destination concentration
 - payload characteristics
 - most targeted port
 
-For Brute Force, prioritize:
+For Brute Force,SSH-Patator,FTP-Patator, prioritize:
 - repeated authentication attempts
 - repeated targeting behaviour
 - timing between attempts
@@ -164,6 +167,9 @@ Do not mention the current flow.
 
     return response.json()["response"]
 
+if verdict in ["Supports","Partially Supports"]:
+    history.record(ip,prediction,confidence)
+    historical_activity=history.lookup(ip)
 
 # ============================================================
 # PIPELINE
@@ -260,12 +266,43 @@ def run_pipeline(flow_data, builder):
 
     print(result)
 
+    verdict = None
+
+    for line in result.splitlines():
+
+    line = line.strip()
+
+    if line in [
+        "Supports",
+        "Partially Supports",
+        "Contradicts",
+        "Insufficient Evidence"
+    ]:
+        verdict = line
+        break
+
+
+    historical_activity = None
+
+    if verdict in ["Supports", "Partially Supports"]:
+
+        ip = flow_data.iloc[0]["Source IP"]
+
+        history.record(
+            ip,
+            prediction,
+            confidence
+        )
+
+        historical_activity = history.lookup(ip)
+
     print("\n--- Agent 3 Report ---\n")
 
     report = agent3_generate_report(
     agent1_summary=structured_data["agent1_summary"],
     current_flow=structured_data["current_flow"],
-    agent2_result=result
+    agent2_result=result,
+    historical_activity=historical_activity
     )
 
     print(report)
@@ -293,9 +330,17 @@ def run_pipeline(flow_data, builder):
 
 print("\nLoading test data...")
 
-df = pd.read_csv(
-    "dataset/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv"
-)
+files = [
+    "dataset/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "dataset/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "dataset/Tuesday-WorkingHours.pcap_ISCX.csv",
+    "dataset/Wednesday-workingHours.pcap_ISCX.csv",
+    "dataset/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+]
+
+frames = [pd.read_csv(f) for f in files]
+
+df = pd.concat(frames, ignore_index=True)
 
 df.columns = df.columns.str.strip()
 df = df.replace([np.inf, -np.inf], np.nan)

@@ -2,6 +2,7 @@ import json
 import requests
 import numpy as np
 import pickle
+from historical_activity import HistoricalActivity
 from writer import agent3_generate_report
 
 with open("rf_model.pkl", "rb") as f:
@@ -9,6 +10,9 @@ with open("rf_model.pkl", "rb") as f:
 
 with open("rf_features.pkl", "rb") as f:
     rf_features = pickle.load(f)
+
+history=HistoricalActivity()
+    
 def build_context_brief(context):
     """
     Lightweight SOC-style summary for LLM reasoning.
@@ -251,11 +255,41 @@ def run_pipeline(flow_data, builder):
 
     print(result)
 
+    verdict = None
+
+    for line in result.splitlines():
+
+        line = line.strip()
+
+        if line in [
+            "Supports",
+            "Partially Supports",
+            "Contradicts",
+            "Insufficient Evidence"
+        ]:
+            verdict = line
+            break
+
+
+    historical_activity = None
+
+    if verdict in ["Supports", "Partially Supports"]:
+
+        ip = flow_data.iloc[0]["Source IP"]
+
+        history.record(
+            ip,
+            prediction,
+            confidence
+        )
+
+        historical_activity = history.lookup(ip)
+
     print(repr(result))
 
     lines = [line.strip() for line in result.splitlines()]
 
-    verdict = None
+    
     reason = None
     evidence = []
     capture_evidence = False
@@ -306,7 +340,8 @@ def run_pipeline(flow_data, builder):
         "verdict": verdict,
         "reason": reason,
         "evidence": evidence
-    }
+    },
+    "historical_activity": historical_activity
     }        
 
 

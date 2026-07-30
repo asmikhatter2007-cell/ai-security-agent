@@ -4,7 +4,7 @@ import json
 
 def agent3_generate_report(agent1_summary,
                            current_flow,
-                           agent2_result):
+                           agent2_result,historical_activity=None):
 
     prompt = f"""
 You are Agent 3 of a multi-agent SOC assistant.
@@ -36,6 +36,9 @@ Current Flow:
 Agent 2 Result:
 {agent2_result}
 
+Historical Activity:
+{json.dumps(historical_activity,indent=2) if historical_activity else "Not Available"}
+
 Generate the report using EXACTLY this structure.
 
 Classification:
@@ -58,6 +61,25 @@ Evidence:
 
 Reason:
 <Copy the reasoning from Agent 2 in one sentence.>
+
+Historical Activity:
+If historical activity is available, add a separate section called
+Historical Activity
+
+Include only:
+
+1. First seen
+2. Last seen
+3. Previous Validated Incidents
+4. Attack History
+
+Do not analyse it.
+
+Do not use it as evidence.
+
+Do not change the recommendation because of it.
+
+Only report the information.
 
 Write ONE recommendation based ONLY on Agent 2's verdict.
 

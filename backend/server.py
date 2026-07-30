@@ -11,7 +11,17 @@ import pickle
 import uuid
 import traceback
 
-df = pd.read_csv("dataset/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
+files = [
+    "dataset/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "dataset/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "dataset/Tuesday-WorkingHours.pcap_ISCX.csv",
+    "dataset/Wednesday-workingHours.pcap_ISCX.csv",
+    "dataset/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+]
+
+frames = [pd.read_csv(f) for f in files]
+
+df = pd.concat(frames, ignore_index=True)
 
 df.columns = df.columns.str.strip()
 df = df.replace([np.inf, -np.inf], np.nan)
@@ -190,7 +200,9 @@ def next_flow():
 
         "current_flow": result.get("current_flow"),
 
-        "agent2_result": result.get("agent2_result")
+        "agent2_result": result.get("agent2_result"),
+
+        "historical_activity": result.get("historical_activity")
     }
 
 @app.post("/generate-report")
@@ -201,7 +213,8 @@ def generate_report(data: dict):
     report = agent3_generate_report(
         agent1_summary=data["agent1_summary"],
         current_flow=data["current_flow"],
-        agent2_result=data["agent2_result"]
+        agent2_result=data["agent2_result"],
+        historical_activity=data.get("historical_activity")
     )
 
     return {"report": report}

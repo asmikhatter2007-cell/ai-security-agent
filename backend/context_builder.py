@@ -9,6 +9,17 @@ class ContextBuilder:
     def __init__(self, dataset):
         self.df = dataset.copy()
 
+        print("Building Source IP history index...")
+
+        self.history_lookup = {}
+
+        grouped = self.df.groupby("Source IP")
+
+        for ip, group in grouped:
+            self.history_lookup[ip] = group.tail(self.HISTORY_SIZE)
+
+        print(f"Indexed {len(self.history_lookup)} Source IPs.")
+
     # ==========================================================
     # MAIN FUNCTION
     # ==========================================================
@@ -86,12 +97,11 @@ class ContextBuilder:
         # --------------------------
         
         source_ip = flow.iloc[0]["Source IP"]
-        history = (
-            self.df[
-                self.df["Source IP"] == source_ip
-            ]
-            .tail(self.HISTORY_SIZE)
-        )
+
+        history = self.history_lookup.get(
+        source_ip,
+        pd.DataFrame(columns=self.df.columns)
+)
 
 
         context["behaviour_summary"] = {
@@ -109,7 +119,7 @@ class ContextBuilder:
                 context["behaviour_summary"]["evidence_from_recent_activity"] = \
                     self.portscan_summary(history)
 
-            elif cls == "DDoS":
+            elif cls in ["DDoS","DoS Hulk","DoS GoldenEye","DoS Slowhttptest","DoS slowloris"]:
 
                 context["behaviour_summary"]["evidence_from_recent_activity"] = \
                     self.ddos_summary(history)
