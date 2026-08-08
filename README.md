@@ -43,5 +43,36 @@ npm run dev
 CICIDS 2017(Canadian Institute for Cybersecurity)-real, lebelled, research-grade network flow data.
 
 ## Project Structure
+\`\`\`
+ai-security-agent/
+├── backend/              # FastAPI server + ML/LLM pipeline
+│   ├── server.py         # API entry point (routes: /predict, /next-flow, /generate-report)
+│   ├── pipeline_core.py  # Core detection pipeline (Agent 1 → Agent 2 → Agent 3)
+│   ├── context_builder.py# Builds SOC context brief for the LLM
+│   ├── historical_activity.py
+│   ├── writer.py         # Agent 3 — generates the final incident report
+│   ├── requirements.txt
+│   ├── rf_model.pkl      # Trained Random Forest model (Agent 1)
+│   ├── rf_features.pkl   # Feature list used by the model
+│   └── dataset/          # CICIDS2017 CSVs (not tracked in git)
+│
+├── frontend/              # React + Vite dashboard
+│   ├── src/
+│   │   ├── components/    # UI components (LiveFeed, ThreatCard, Sidebar, etc.)
+│   │   ├── api/            # Calls to the backend API
+│   │   └── App.jsx
+│   └── package.json
+│
+├── exploration/           # Early data-analysis scripts (kept for reference)
+│   ├── analyze_columns.py
+│   ├── explore_data.py
+│   └── unsw.py
+│
+├── rf_train.py            # Trains the Random Forest model (Agent 1)
+├── test_agent.py          # Test script for the pipeline
+├── thresholds.json        # Detection thresholds config
+├── Documentation.md        # Architecture & design notes
+└── README.md
+\\\`
 
 
