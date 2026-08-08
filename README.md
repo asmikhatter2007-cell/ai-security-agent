@@ -48,7 +48,6 @@ CICIDS 2017(Canadian Institute for Cybersecurity)-real, lebelled, research-grade
 \`\`\`
 ai-security-agent/
 ├── backend/              # FastAPI server + ML/LLM pipeline
-<br>
 │   ├── server.py         # API entry point (routes: /predict, /next-flow, /generate-report)
 │   ├── pipeline_core.py  # Core detection pipeline (Agent 1 → Agent 2 → Agent 3)
 │   ├── context_builder.py# Builds SOC context brief for the LLM
