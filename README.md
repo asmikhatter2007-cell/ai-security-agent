@@ -45,7 +45,7 @@ CICIDS 2017(Canadian Institute for Cybersecurity)-real, lebelled, research-grade
 
 ## Project Structure
 
-\`\`\`
+````
 ai-security-agent/
 ├── backend/              # FastAPI server + ML/LLM pipeline
 │   ├── server.py         # API entry point (routes: /predict, /next-flow, /generate-report)
@@ -75,4 +75,4 @@ ai-security-agent/
 ├── thresholds.json        # Detection thresholds config
 ├── Documentation.md        # Architecture & design notes
 └── README.md
-\`\`\`
+````
