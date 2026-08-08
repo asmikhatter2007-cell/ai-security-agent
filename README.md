@@ -25,27 +25,30 @@ HackBlock, an AI Security Agent is a multi-agent SOC that combines ML, Context-B
 - ML: Random Forest, Scikit-learn
 - LLM: Ollama Qwen2.5(7B)
 
-##Setup
-###Backend
-\`\`\`
+## Setup
+### Backend
 cd backend
+<br>
 pip install -r requirements.txt
+<br>
 uvicorn server:app --reload
-\`\`\`
-###Frontend
-\`\`\`
+
+### Frontend
 cd frontend
+<br>
 npm install
+<br>
 npm run dev
-\`\`\`
 
 ## Dataset
 CICIDS 2017(Canadian Institute for Cybersecurity)-real, lebelled, research-grade network flow data.
 
 ## Project Structure
+
 \`\`\`
 ai-security-agent/
 ├── backend/              # FastAPI server + ML/LLM pipeline
+<br>
 │   ├── server.py         # API entry point (routes: /predict, /next-flow, /generate-report)
 │   ├── pipeline_core.py  # Core detection pipeline (Agent 1 → Agent 2 → Agent 3)
 │   ├── context_builder.py# Builds SOC context brief for the LLM
@@ -73,6 +76,4 @@ ai-security-agent/
 ├── thresholds.json        # Detection thresholds config
 ├── Documentation.md        # Architecture & design notes
 └── README.md
-\\\`
-
-
+\`\`\`
