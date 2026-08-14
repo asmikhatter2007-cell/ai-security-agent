@@ -17,6 +17,7 @@ df = pd.read_csv("UNSW_NB15_training-set.csv", low_memory=False)
 # test_df = pd.read_csv("UNSW_NB15_testing-set.csv")
 # df = pd.concat([df, test_df], ignore_index=True)
 
+
 print("Columns:", df.columns)
 
 # ============================================================

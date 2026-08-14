@@ -74,13 +74,13 @@ For PortScan, prioritize:
 - timing between flows
 - payload characteristics
 
-For DDoS, prioritize:
+For DDoS, DoS Hulk, DoS GoldenEye, DoS Slowloris, DoS Slowhttptest, prioritize:
 - request frequency
 - destination concentration
 - payload characteristics
 - most targeted port
 
-For Brute Force, prioritize:
+For Brute Force,SSH-Patator,FTP-Patator, prioritize:
 - repeated authentication attempts
 - repeated targeting behaviour
 - timing between attempts
@@ -128,6 +128,11 @@ You have to briefly tell evidence you used to support or contradict Agent 1 and 
 
 Reason:
 Exactly one sentence and don't say things like it aligns or doesn't to that specific threat type.
+
+Mention the predicted attack name exactly as provided by Agent 1 if your verdict is supports.
+
+Do not substitute one attack for another.
+
 Reference ONLY the behavioural observations.
 Do not mention the current flow.
 """
@@ -158,7 +163,7 @@ Do not mention the current flow.
             "temperature": 0.1
         }
     },
-    timeout=90
+    timeout=120
 )
 
     print("Ollama responded")
@@ -324,6 +329,8 @@ def run_pipeline(flow_data, builder):
         elif capture_evidence and line:
             evidence.append(line)
 
+        
+
     
 
 
@@ -341,7 +348,7 @@ def run_pipeline(flow_data, builder):
         "reason": reason,
         "evidence": evidence
     },
-    "historical_activity": historical_activity
+    "historical_activity": history
     }        
 
 

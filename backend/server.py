@@ -208,13 +208,114 @@ def next_flow():
 @app.post("/generate-report")
 def generate_report(data: dict):
 
-    
+    verdict = data["agent2_result"]["verdict"]
 
-    report = agent3_generate_report(
-        agent1_summary=data["agent1_summary"],
-        current_flow=data["current_flow"],
-        agent2_result=data["agent2_result"],
-        historical_activity=data.get("historical_activity")
-    )
+    if verdict == "Supports":
+        recommendation = "Escalate this incident for SOC analyst review."
 
-    return {"report": report}
+    elif verdict == "Partially Supports":
+        recommendation = "Review additional telemetry before escalation."
+
+    elif verdict == "Contradicts":
+        recommendation = "Revalidate the prediction using additional evidence."
+
+    else:
+        recommendation = "Collect more behavioural data before making a decision."
+
+    history = data.get("historical_activity")
+
+    print(history)
+    print(type(history))
+
+     
+
+    report_data = {
+        "classification": data["agent1_summary"]["prediction"],
+        "confidence": data["agent1_summary"]["confidence"],
+
+        "source": data["current_flow"]["Source IP"],
+        "destination": data["current_flow"]["Destination IP"],
+
+        "verdict": data["agent2_result"]["verdict"],
+        "reason": data["agent2_result"]["reason"],
+        "evidence": data["agent2_result"]["evidence"],
+        "historical_activity":history,
+
+        
+        "recommendation": recommendation
+    }
+
+
+    if isinstance(history, dict):
+        print("Keys:", history.keys())
+
+    print("==============================\n")
+
+    if history is not None:
+
+        history_data = history.get("data", {})
+
+        if history_data:
+            ip = list(history_data.keys())[0]
+
+            ip_history = history_data[ip]
+
+            report_data["historical_activity"] = {
+                "source_ip": ip,
+                "first_seen": ip_history["first_seen"],
+                "last_seen": ip_history["last_seen"],
+                "validated_incidents": ip_history["validated_incidents"],
+                "threat_counts": ip_history["threat_counts"]
+            }
+
+    report = f"""
+Executive Summary:
+This incident has been classified as {report_data['classification']} 
+with a confidence of {report_data['confidence']}%.
+
+Agent 2 Verdict:
+{report_data['verdict']}
+
+Reason:
+{report_data['reason']}
+
+
+Evidence:
+
+"""
+
+    for item in report_data["evidence"]:
+        report += f" {item}\n"
+
+
+    if report_data.get("historical_activity"):
+
+        history = report_data["historical_activity"]
+
+        report += f"""
+
+Historical Activity:
+
+Source IP: {history.get('source_ip')}
+First Seen: {history.get('first_seen')}
+Last Seen: {history.get('last_seen')}
+Validated Incidents: {history.get('validated_incidents')}
+"""
+
+    report += "\nThreat Distribution:\n"
+
+    for threat, count in history["threat_counts"].items():
+        report += f"• {threat}: {count}\n"
+
+
+    report += f"""
+
+Recommendation:
+
+{report_data['recommendation']}
+"""
+
+
+    return {
+        "report": report
+    }

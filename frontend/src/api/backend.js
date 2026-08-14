@@ -21,6 +21,7 @@ export async function generateReport(flow) {
       agent1_summary: flow.agent1_summary,
       current_flow: flow.current_flow,
       agent2_result: flow.agent2_result,
+      historical_activity: flow.historical_activity
     }),
   });
 

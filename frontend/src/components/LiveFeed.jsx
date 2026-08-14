@@ -43,10 +43,51 @@ function FlowCard({ flow, onExpire }) {
 
   const color = THREAT_COLORS[flow.threat] || "#6B7280";
   const icon = THREAT_ICONS[flow.threat] || "?";
-  const sections = report
-  ? report.split(/\n\s*\n/)
-  : []; 
+  const headings = [
+  "Executive Summary:",
+  "Agent 2 Verdict:",
+  "Reason:",
+  "Evidence:",
+  "Historical Activity:",
+  "Recommendation:",
+];
 
+  let sections = [];
+
+  if (report) {
+
+    let currentHeading = "";
+    let currentContent = "";
+
+    report.split("\n").forEach((line) => {
+
+      if (headings.includes(line.trim())) {
+
+        if (currentHeading) {
+        sections.push({
+          title: currentHeading,
+          content: currentContent.trim(),
+        });
+      }
+
+        currentHeading = line.trim();
+        currentContent = "";
+
+    }    else {
+
+        currentContent += line + "\n";
+
+    }
+
+  });
+
+  if (currentHeading) {
+    sections.push({
+      title: currentHeading,
+      content: currentContent.trim(),
+    });
+  }
+}
   return (
     <div
       onClick={() => !flow.isBenign && setExpanded(e => !e)}
@@ -318,7 +359,7 @@ function FlowCard({ flow, onExpire }) {
                     fontSize: 12,
                 }}
             >
-                {section.trim().split("\n")[0]}
+                {section.title}
             </div>
 
             <div
@@ -329,7 +370,7 @@ function FlowCard({ flow, onExpire }) {
                     fontSize: 14,
                 }}
             >
-                {section.trim().split("\n").slice(1).join("\n")}
+                {section.content}
             </div>
 
         </div>
