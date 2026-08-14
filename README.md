@@ -1,6 +1,6 @@
 # HackBlock
 
-HackBlock, an AI Security Agent is a multi-agent SOC that combines ML, Context-Builder, LLM and a report generator to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
+HackBlock, is a multi-agent SOC that combines ML, Context-Builder, LLM and a report generator to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
 
 ## How it works
 1. **Agent 1**- A fast ML based filter(Random Forest)which scans the logs and flags suspicious network flows through finding patterns in the data.
