@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const BOOT_STEPS = [
-  "Initializing AI Security Agent...",
+  "Initializing HackBlock...",
   "Loading Random Forest model...",
   "Connecting to Qwen 2.5 LLM...",
   "Calibrating threat detection thresholds...",
