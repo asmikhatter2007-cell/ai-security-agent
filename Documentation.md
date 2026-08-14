@@ -26,7 +26,7 @@ Architecture-
 
 2. **Context-Builder**- This layer converts raw network logs into behavioural summaries. It plays an important role because an LLM needs richer context to analyze evidence and reach a verdict.
 
-3. **Agent2**- This part consists of an LLM whose task is to not detect a threat but to support or disagree with the Agent1's prediction based on the available behavioural evidence. This architecture was adapted to prevent irrelevant results.
+3. **Agent2**- This part consists of an LLM whose task is to not detect a threat but supports, partially supports, contradicts, or provides insufficient evidence for Agent 1's prediction. This architecture was adapted to prevent irrelevant results.
 
 4. **Agent3**- The main task of this layer is to prepare a report based on the results of Agent 1 and Agent 2. It gives evidence used, recommendation, summary and reason.
 
