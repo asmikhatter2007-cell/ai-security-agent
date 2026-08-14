@@ -165,4 +165,35 @@ Features-
 
 
 6. Analyst Reports
+## Model Performance(Agent-1 Random Forest)
+Evaluated on a test set of 3,65,911 flows from CICIDS2017.
+
+                             precision    recall  f1-score   support
+
+                    BENIGN       1.00      1.00      1.00    254383
+                       Bot       0.82      0.78      0.80       393
+                      DDoS       1.00      1.00      1.00     25606
+             DoS GoldenEye       0.98      0.98      0.98      2059
+                  DoS Hulk       1.00      1.00      1.00     46215
+          DoS Slowhttptest       0.99      0.99      0.99      1100
+             DoS slowloris       1.00      0.99      0.99      1159
+               FTP-Patator       1.00      1.00      1.00      1588
+              Infiltration       1.00      0.57      0.73         7
+                  PortScan       0.99      1.00      1.00     31785
+               SSH-Patator       1.00      1.00      1.00      1179
+  Web Attack � Brute Force       0.32      0.29      0.30       301
+Web Attack � Sql Injection       1.00      0.50      0.67         4
+          Web Attack � XSS       0.08      0.06      0.07       130
+
+                  accuracy                           1.00    365911
+                 macro avg       0.88      0.81      0.83    365911
+              weighted avg       1.00      1.00      1.00    365911
+
+### Notes on evaluation
+
+The model performs near-perfectly on the classes- DDoS,Portscan,brute-force variants,and DoS types, which are the primary detection targets of this system.
+
+The gap between the weighted average(1.00) and macro average(0.83) is expected because weighted average is dominated by BENIGN traffic, which makes up almost 70% of test set, so it makes weaker performance on rare classes. Web attack subclasses(XSS, SQL Injection) have very low support in CICIDS2017 and the model underperforms there which is class-imbalance limitation. 
+
+              
 
