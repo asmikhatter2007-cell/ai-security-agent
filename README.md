@@ -2,6 +2,9 @@
 
 HackBlock, is a multi-agent SOC that combines ML, Context-Builder, LLM and a report generator to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
 
+HackBlock Dashboard<img width="950" height="427" alt="image" src="https://github.com/user-attachments/assets/2af754c4-6072-44ea-bcc6-37c9a3f4f121" />
+
+
 ## How it works
 1. **Agent 1**- A fast ML based filter(Random Forest)which scans the logs and flags suspicious network flows through finding patterns in the data.
 
@@ -18,6 +21,15 @@ HackBlock, is a multi-agent SOC that combines ML, Context-Builder, LLM and a rep
 4. Live Feed
 5. Recent Incidents
 6. Analyst Reports
+
+Agent 3 Incident Report
+<img width="930" height="414" alt="image" src="https://github.com/user-attachments/assets/ff95945d-5464-4779-844b-4297371305ab" />
+<img width="935" height="406" alt="image" src="https://github.com/user-attachments/assets/ef1791e5-be1f-4962-88bf-8c47f7165116" />
+<img width="932" height="404" alt="image" src="https://github.com/user-attachments/assets/5506560b-4f12-4929-9e17-04860a8eb711" />
+
+
+
+   
 
 ## Tech stack
 - Frontend: React, Vite, Tailwind CSS
