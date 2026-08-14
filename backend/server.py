@@ -208,7 +208,7 @@ def next_flow():
 @app.post("/generate-report")
 def generate_report(data: dict):
 
-    print(data)
+    
 
     report = agent3_generate_report(
         agent1_summary=data["agent1_summary"],
