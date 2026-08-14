@@ -1,7 +1,7 @@
 # HackBlock
 
 ## Project Overview:
-HackBlock, is a multi-agent SOC assistant that combines Machine Learning Classifier, a Context-Builder, an LLM-based behavioural validation and a Python based SOC report formatter to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
+HackBlock, is a multi-agent SOC assistant that combines Machine Learning Classifier, a Context-Builder, an LLM-based behavioural validation and a Python based SOC report formatter to predict a cybersecurity threat and generate a report consisting of result, evidence, reason, recommendation, historical activity and a summary.
 
 The system provides-
 
@@ -24,15 +24,15 @@ The main motive was to make something in the domain of cybersecurity to explore 
 Architecture-
 1. **Agent1**- A fast ML based filter(Random Forest)which scans the logs and flags suspicious network flows through finding patterns in the data.
 
-2. **Context-Builder**- This layer converts raw network logs into behavioural summaries. It plays an important role because an LLM needs richer context to analyze evidence reach a verdict.
+2. **Context-Builder**- This layer converts raw network logs into behavioural summaries. It plays an important role because an LLM needs richer context to analyze evidence and reach a verdict.
 
-3. **Agent2**- This part consists of an LLM whose task is to not detect a threat but to support or disagree with the Agent1's prediction. This architecture was adapted to prevent irrelevant results.
+3. **Agent2**- This part consists of an LLM whose task is to not detect a threat but to support or disagree with the Agent1's prediction based on the available behavioural evidence. This architecture was adapted to prevent irrelevant results.
 
 4. **Agent3**- The main task of this layer is to prepare a report based on the results of Agent 1 and Agent 2. It gives evidence used, recommendation, summary and reason.
 
 Pipeline-
 
-Network Traffic --> Agent 1(Random Forest) --> Context Builder(Behaviour Summary) --> Agent 2(Qwen2.5) --> Agent 3(SOC Report)
+Network Traffic --> Agent 1(Random Forest) --> Context Builder(Behaviour Summary) --> Agent 2(Qwen2.5) --> Agent 3(Python SOC Report Formatter)
 
 1. Agent 1-
 
@@ -119,10 +119,10 @@ A deterministic Python-based formatting layer that converts the outputs of Agent
 
 ## LLM-
 
-1. Ollama QWEN 2.5(7B) is choosen as the LLM that is locally deployed.
+1. Ollama QWEN 2.5(7B) is chosen as the LLM that is locally deployed.
 
 
-2. Python(Pandas) is used for data analysis.
+2. Python(Pandas and Numpy) is used for data analysis.
 
 
 3. VS Code and Git for version control.
@@ -130,7 +130,7 @@ A deterministic Python-based formatting layer that converts the outputs of Agent
 
 
 ## Intentional design choice-ML + LLM Behavioural Validation-
-Agent 1 is responsible for threat classification and Agent 2 is restricted to validate whether the observed behavioural evidence supports the ML prediction.
+Agent 1 is responsible for threat classification and Agent 2 is restricted to validate whether the observed behavioural evidence supports the ML prediction. This separation keeps statistical classification and behavioural reasoning distinct and prevents the LLM from independently determining the threat.
 
 
 # Primary Threats detection-
@@ -147,10 +147,10 @@ The underlying CICIDS2017-trained classifier contains additional attack classes,
 
 ## Extensions-
 
-4. Unusual Geographical Access- login from a unexpected location for a given user.
+4. Unusual Geographical Access- login from an unexpected location for a given user.
 
 
-5. Data Exfiltration- unusuall large amount of data exchange at an unusual time.
+5. Data Exfiltration- unusually large amount of data exchange at an unusual time.
 
 
 
@@ -194,6 +194,7 @@ Evaluated on a test set of 3,65,911 flows from CICIDS2017.
                SSH-Patator       1.00      1.00      1.00      1179
     Web Attack Brute Force       0.32      0.29      0.30       301
   Web Attack Sql Injection       1.00      0.50      0.67         4
+  
             Web Attack XSS       0.08      0.06      0.07       130
 
                   accuracy                           1.00    365911
