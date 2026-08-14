@@ -19,7 +19,7 @@ HackBlock Dashboard<img width="950" height="427" alt="image" src="https://github
 ## How it works
 1. **Agent 1**- A fast ML based filter(Random Forest)which scans the logs and flags suspicious network flows through finding patterns in the data.
 
-2. **Context-Builder**- This layer converts raw network logs into behavioural summaries. It plays an important role because an LLM needs richer context to analyze evidence reach a verdict.
+2. **Context-Builder**- This layer converts raw network logs into behavioural summaries. It plays an important role because an LLM needs richer context to analyze evidence and reach a verdict.
 
 3. **Agent 2**- This part consists of an LLM whose task is to not detect a threat but to support or disagree with the Agent1's prediction. This architecture was adapted to prevent irrelevant results.
 
@@ -93,10 +93,9 @@ CICIDS 2017(Canadian Institute for Cybersecurity)-real, labelled, research-grade
 hackblock/
 ├── backend/              # FastAPI server + ML/LLM pipeline
 │   ├── server.py         # API entry point (routes: /predict, /next-flow, /generate-report)
-│   ├── pipeline_core.py  # Core detection pipeline (Agent 1 → Agent 2 → Agent 3)
+│   ├── pipeline_core.py  # Core detection pipeline (Agent 1 → Context Builder -> Agent 2)
 │   ├── context_builder.py# Builds SOC context brief for the LLM
 │   ├── historical_activity.py
-│   ├── writer.py         # Agent 3 — generates the final incident report
 │   ├── requirements.txt
 │   ├── rf_model.pkl      # Trained Random Forest model (Agent 1)
 │   ├── rf_features.pkl   # Feature list used by the model
