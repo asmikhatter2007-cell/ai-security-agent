@@ -90,7 +90,7 @@ CICIDS 2017(Canadian Institute for Cybersecurity)-real, labelled, research-grade
 ## Project Structure
 
 ````
-ai-security-agent/
+hackblock/
 ├── backend/              # FastAPI server + ML/LLM pipeline
 │   ├── server.py         # API entry point (routes: /predict, /next-flow, /generate-report)
 │   ├── pipeline_core.py  # Core detection pipeline (Agent 1 → Agent 2 → Agent 3)
