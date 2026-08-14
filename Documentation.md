@@ -192,12 +192,10 @@ Evaluated on a test set of 3,65,911 flows from CICIDS2017.
               Infiltration       1.00      0.57      0.73         7
                   PortScan       0.99      1.00      1.00     31785
                SSH-Patator       1.00      1.00      1.00      1179
-  Web Attack - Brute Force       0.32      0.29      0.30       301
-  <br>
-Web Attack - Sql Injection       1.00      0.50      0.67         4
-<br>
+               Brute Force       0.32      0.29      0.30       301
+             Sql Injection       1.00      0.50      0.67         4
           Web- Attack  XSS       0.08      0.06      0.07       130
-
+  
                   accuracy                           1.00    365911
                  macro avg       0.88      0.81      0.83    365911
               weighted avg       1.00      1.00      1.00    365911
