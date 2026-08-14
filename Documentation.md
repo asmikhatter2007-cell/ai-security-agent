@@ -1,9 +1,20 @@
-HackBlock
+# HackBlock
 
-Project Overview:
-HackBlock, an AI Security Agent is a multi-agent SOC that combines ML, Context-Builder, LLM and a report generator to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
+## Project Overview:
+HackBlock, is a multi-agent SOC assistant that combines Machine Learning Classifier, a Context-Builder, an LLM-based behavioural validation and a Python based SOC report formatter to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
 
-Motivation:
+The system provides-
+
+- Threat classification
+- Confidence estimation
+- Behavioural evidence
+- LLM-based validation
+- Historical activity
+- Analyst-oriented recommendations
+- Live threat monitoring
+- Structured SOC incident reports
+
+## Motivation:
 The main motive was to make something in the domain of cybersecurity to explore my interests and this idea seemed to be most appealing because-
 1. Many SOC Analysts spend their time detecting threats manually.
 2. Existing ML models only classify and many solutions use thresholds for detecting threats.
@@ -63,15 +74,24 @@ Designed in consideration of-
 
 
 
-It Converts technical observations to-
+It Converts technical observations using python formatter to-
 
 * executive summary
 
 * SOC report
 
-Tech Stack-
+  The report contains:
+  1. Classification
+  2. Confidence
+  3. Agent 2 Verdict
+  4. Reason
+  5. Evidence
+  6. Historical Activity
+  7. Recommendation
 
-Frontend-
+# Tech Stack-
+
+## Frontend-
 
 1. React
 
@@ -83,7 +103,7 @@ Frontend-
 
 
 
-Backend-
+## Backend-
 
 1. FastAPI
 
@@ -92,7 +112,7 @@ Backend-
 
 
 
-ML-
+## ML-
 
 1. Random Forest
 
@@ -101,7 +121,7 @@ ML-
 
 
 
-LLM-
+## LLM-
 
 1. Ollama QWEN 2.5(7B) is choosen as the LLM that is locally deployed.
 
@@ -113,7 +133,7 @@ LLM-
 
 
 
-Intentional design choice-ML + LLM Reasoning-
+# Intentional design choice-ML + LLM Reasoning-
 
 1. Accuracy- In ML systems one can almost not predict why a log was flagged or what the logic behind it was. In order to prevent that we used the rule based approach with an LLM reasoning.
 
@@ -122,7 +142,7 @@ Intentional design choice-ML + LLM Reasoning-
 
 
 
-Threats detection-
+# Threats detection-
 
 1. Brute Force- multiple failed logins from a single IP address.
 
@@ -142,11 +162,11 @@ Yet to build-
 
 
 
-Dataset-
+# Dataset-
 
 CICIDS 2017(Canadian Institute for Cybersecurity)- real, labelled, research-grade network flow data.
 
-Features-
+# Features-
 
 1. Multi-agent
 
