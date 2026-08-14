@@ -1,4 +1,4 @@
-# AI Security Agent
+# HackBlock
 
 HackBlock, an AI Security Agent is a multi-agent SOC that combines ML, Context-Builder, LLM and a report generator to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
 
@@ -23,7 +23,7 @@ HackBlock, an AI Security Agent is a multi-agent SOC that combines ML, Context-B
 - Frontend: React, Vite, Tailwind CSS
 - Backend: FastAPI, Python
 - ML: Random Forest, Scikit-learn
-- LLM: Ollama Qwen2.5(7B)
+- LLM: Ollama Qwen2.5(7B for Agent 2 and 3B for Agent 3)
 
 ## Setup
 ### Backend
