@@ -27,7 +27,7 @@ function Navbar(){
 
                 <div>
 
-                    <h2>AI Security Agent</h2>
+                    <h2>HackBlock</h2>
 
                     <p>Real-Time Threat Monitoring</p>
 
