@@ -1,6 +1,17 @@
 # HackBlock
 
-HackBlock, is a multi-agent SOC that combines ML, Context-Builder, LLM and a report generator to predict a cybersecurity threat and generate a report consisting of result, evidence,reason, recommendation and a summary.
+HackBlock, is a multi-agent SOC assistant that combines Machine Learning Classifier, a Context-Builder, an LLM-based behavioural validation and a Python based SOC report formatter to predict a cybersecurity threat and generate a report consisting of result, evidence, reason, recommendation, historical activity and a summary.
+
+The system provides:
+
+- Threat classification
+- Confidence estimation
+- Behavioural evidence
+- LLM-based behavioural validation
+- Historical activity
+- Analyst-oriented recommendations
+- Live threat monitoring
+- Structured SOC incident reports
 
 HackBlock Dashboard<img width="950" height="427" alt="image" src="https://github.com/user-attachments/assets/2af754c4-6072-44ea-bcc6-37c9a3f4f121" />
 
@@ -12,8 +23,28 @@ HackBlock Dashboard<img width="950" height="427" alt="image" src="https://github
 
 3. **Agent 2**- This part consists of an LLM whose task is to not detect a threat but to support or disagree with the Agent1's prediction. This architecture was adapted to prevent irrelevant results.
 
-4. **Agent 3**- The main task of this layer is to prepare a report based on the results of Agent 1 and Agent 2. It gives evidence used, recommendation, summary and reason.
+Designed with:
 
+- Structured prompting
+- Behavioural evidence prioritization
+- Hallucination reduction
+- Evidence-only reasoning
+- No independent threat classification
+- No new evidence generation
+  
+4. **Agent 3** - A deterministic Python-based formatting layer that converts the outputs of Agent 1 and Agent 2 into a structured SOC incident report.
+
+The report contains:
+
+- Executive Summary
+- Classification
+- Confidence
+- Agent 2 Verdict
+- Reason
+- Evidence
+- Historical Activity
+- Recommendation
+  
 ## Features
 1. Multi-agent
 2. Explainable-AI
@@ -35,8 +66,9 @@ Agent 3 Incident Report
 - Frontend: React, Vite, Tailwind CSS
 - Backend: FastAPI, Python
 - ML: Random Forest, Scikit-learn
-- LLM: Ollama Qwen2.5(7B for Agent 2 and 3B for Agent 3)
-
+- LLM: Ollama Qwen2.5(7B for Agent 2)
+- Incident Report: Python-based deterministic formatter
+  
 ## Setup
 ### Backend
 cd backend
@@ -53,7 +85,7 @@ npm install
 npm run dev
 
 ## Dataset
-CICIDS 2017(Canadian Institute for Cybersecurity)-real, lebelled, research-grade network flow data.
+CICIDS 2017(Canadian Institute for Cybersecurity)-real, labelled, research-grade network flow data.
 
 ## Project Structure
 
