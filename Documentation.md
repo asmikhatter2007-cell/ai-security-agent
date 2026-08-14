@@ -74,20 +74,16 @@ Designed in consideration of-
 
 
 
-It Converts technical observations using python formatter to-
+A deterministic Python-based formatting layer that converts the outputs of Agent 1 and Agent 2 into a structured SOC incident report including-
 
-* executive summary
-
-* SOC report
-
-  The report contains:
-  1. Classification
-  2. Confidence
-  3. Agent 2 Verdict
-  4. Reason
-  5. Evidence
-  6. Historical Activity
-  7. Recommendation
+1. Executive summary
+2. Classification
+3. Confidence
+4. Agent 2 Verdict
+5. Reason
+6. Evidence
+7. Historical Activity
+8. Recommendation
 
 # Tech Stack-
 
@@ -133,16 +129,11 @@ It Converts technical observations using python formatter to-
 
 
 
-# Intentional design choice-ML + LLM Reasoning-
-
-1. Accuracy- In ML systems one can almost not predict why a log was flagged or what the logic behind it was. In order to prevent that we used the rule based approach with an LLM reasoning.
-
-
-2. Acknowledged tradeoff- A trained ML system would probably have a higher accuracy on this same task- this is an intentional decision.
+## Intentional design choice-ML + LLM Behavioural Validation-
+Agent 1 is responsible for threat classification and Agent 2 is restricted to validate whether the observed behavioural evidence supports the ML prediction.
 
 
-
-# Threats detection-
+# Primary Threats detection-
 
 1. Brute Force- multiple failed logins from a single IP address.
 
@@ -151,9 +142,10 @@ It Converts technical observations using python formatter to-
 
 
 3. DDoS- high request volume from different IPs.
+   
+The underlying CICIDS2017-trained classifier contains additional attack classes, including FTP-Patator, SSH-Patator, Bot and web attack categories.
 
-
-Yet to build-
+## Extensions-
 
 4. Unusual Geographical Access- login from a unexpected location for a given user.
 
