@@ -3,7 +3,6 @@ import requests
 import numpy as np
 import pickle
 from historical_activity import HistoricalActivity
-from writer import agent3_generate_report
 
 with open("rf_model.pkl", "rb") as f:
     rf_model = pickle.load(f)
@@ -151,7 +150,7 @@ Do not mention the current flow.
     # )
 
     # return response.json()["response"]
-    print("Calling Ollama...")
+    
 
     response = requests.post(
     "http://localhost:11434/api/generate",
@@ -165,9 +164,6 @@ Do not mention the current flow.
     },
     timeout=120
 )
-
-    print("Ollama responded")
-    print(response.status_code)
 
     return response.json()["response"]
 
@@ -188,8 +184,7 @@ def run_pipeline(flow_data, builder):
     # -------------------------
     # Agent 1
     # -------------------------
-    print(X)
-    print(X.shape)
+    
     prediction = rf_model.predict(X)[0]
     probability = rf_model.predict_proba(X)[0]
     confidence = float(max(probability) * 100)
@@ -213,9 +208,7 @@ def run_pipeline(flow_data, builder):
         "reason": None,
         #"report": None
     }
-    print("\n⚠️ Suspicious flow detected.")
-    print("Building context for Agent 2...\n")
-
+    
     # -------------------------
     # Context Builder
     # -------------------------

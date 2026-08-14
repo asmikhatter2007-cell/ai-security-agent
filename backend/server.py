@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pipeline_core import run_pipeline
 from context_builder import ContextBuilder
-from writer import agent3_generate_report
 import pandas as pd
 import numpy as np
 import random

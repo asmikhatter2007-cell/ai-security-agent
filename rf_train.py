@@ -12,7 +12,7 @@ import pickle
 print("Loading dataset...")
 import glob
 
-files = glob.glob("dataset/*.csv")
+files = glob.glob("backend/dataset/*.csv")
   # or "dataset/*.csv" if in folder
 
 dfs = []
